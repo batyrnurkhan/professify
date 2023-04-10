@@ -44,6 +44,8 @@ class Profile(models.Model):
     )
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
     bio = models.TextField(blank=True)
     birth_date = models.DateField(null=True, blank=True)
     phone_number = models.CharField(max_length=15, blank=True)

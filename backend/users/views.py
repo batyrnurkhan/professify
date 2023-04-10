@@ -8,7 +8,9 @@ from .models import Profile, CustomUser
 from .serializers import CustomUserSerializer, ProfileSerializer, UniversityViewTeacherSerializer
 from rest_framework import generics, permissions
 from .permissions import CanUpdateProfile, IsUniversity
-
+from rest_framework import status
+from rest_framework.views import APIView
+from django.contrib.auth import logout
 
 class CreateUserView(generics.CreateAPIView):
     serializer_class = CustomUserSerializer
@@ -30,7 +32,6 @@ class CustomObtainAuthToken(ObtainAuthToken):
             'is_default': user.is_default,
         })
 
-
 class UserProfile(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [permissions.IsAuthenticated, CanUpdateProfile]
@@ -50,3 +51,9 @@ class UniversityViewTeachers(generics.ListAPIView):
 
     def get_queryset(self):
         return CustomUser.objects.filter(is_teacher=True)
+
+class LogoutView(APIView):
+    def post(self, request, *args, **kwargs):
+        logout(request)
+        return Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
+    

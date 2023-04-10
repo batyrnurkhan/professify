@@ -12,12 +12,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return user
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    user = CustomUserSerializer(read_only=True)
 
-    
     class Meta:
         model = Profile
-        fields = ('id', 'user', 'bio', 'birth_date', 'phone_number', 'profile_picture', 'address', 'city', 'country', 'gender', 'age', 'experience', 'skills')
+        fields = ('id', 'user', 'first_name', 'last_name',  'bio', 'birth_date', 'phone_number', 'profile_picture', 'address', 'city', 'country', 'gender', 'age', 'experience', 'skills')
+
+
 
 class UniversityViewTeacherSerializer(serializers.ModelSerializer):
     experience = serializers.CharField(source='profile.experience')
@@ -26,5 +27,6 @@ class UniversityViewTeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'experience', 'skills']
+
 
 
