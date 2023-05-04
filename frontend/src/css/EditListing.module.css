@@ -1,0 +1,26 @@
+.container {
+    width: 50%;
+    margin: 0 auto;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-top: 1rem;
+  }
+  
+  input {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+  
+  .submit-button {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }

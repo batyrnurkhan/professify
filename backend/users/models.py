@@ -72,3 +72,22 @@ def save_user_profile(sender, instance, **kwargs):
     if not hasattr(instance, 'profile'):
         Profile.objects.create(user=instance)
     instance.profile.save()
+
+
+class TeacherUser(CustomUser):
+    class Meta:
+        proxy = True
+        verbose_name = 'Teacher'
+        verbose_name_plural = 'Teachers'
+
+class UniversityUser(CustomUser):
+    class Meta:
+        proxy = True
+        verbose_name = 'University'
+        verbose_name_plural = 'Universities'
+
+class StaffUser(CustomUser):
+    class Meta:
+        proxy = True
+        verbose_name = 'Staff'
+        verbose_name_plural = 'Staff'

@@ -15,7 +15,7 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/api/users/register/', {
+      const response = await api.post('/users/register/', {
         email: email,
         password: password,
         first_name: firstName,
@@ -38,7 +38,7 @@ const Registration = () => {
 
     <div className={styles.container}>
       <form onSubmit={handleSubmit} className={styles.form}>
-        <label>
+        <label className={`${styles.textColor}`}>
           First Name:
           <input
             type="text"
@@ -48,7 +48,7 @@ const Registration = () => {
           />
         </label>
         <br />
-        <label>
+        <label className={`${styles.textColor}`}>
           Last Name:
           <input
             type="text"
@@ -58,7 +58,7 @@ const Registration = () => {
           />
         </label>
         <br />
-        <label>
+        <label className={`${styles.textColor}`}>
           Email:
           <input
             type="email"
@@ -66,9 +66,9 @@ const Registration = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </label>
+        </label >
         <br />
-        <label>
+        <label className={`${styles.textColor}`}>
           Password:
           <input
             type="password"

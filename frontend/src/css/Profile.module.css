@@ -1,31 +1,56 @@
-/* Profile.module.css */
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
-  }
-  
-  .heading {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  .info {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  
-  .label {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
-  
-  .value {
-    margin-bottom: 1rem;
-  }
-  
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f1f1f1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.label {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.value {
+  font-size: 1.2rem;
+  color: #777;
+}
+
+.errorMessage {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c2c7;
+  border-radius: 5px;
+}
+
+.profilePicture {
+  display: block;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+  margin-bottom: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+}

@@ -1,43 +1,71 @@
-/* Navbar.module.css */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #FFAFE7;
-    padding: 1rem;
-  }
-  
-  .logo {
-    height:80px;
-  }
-  
-  .actions {
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .navItems {
-    display: flex;
-    gap: 10px;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #333;
+  color: white;
+}
 
-  .button {
-    background-color: #FF69B4;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition-duration: 0.4s;
-  }
-  
-  .button:hover {
-    background-color: #FF1493;
-    color: white;
-  }
-  
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.button {
+  text-decoration: none;
+  color: white;
+  background-color: transparent;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 20px; /* Add border-radius for rounded edges */
+}
+
+
+.buttonGroup {
+  display: flex;
+}
+
+.buttonGroup .button + .button {
+  margin-left: 1rem;
+}
+
+.loginButton {
+  background-color: #007bff;
+  border: 1px solid #007bff; /* Add border color to match background color */
+}
+
+.registerButton {
+  background-color: #28a745;
+  border: 1px solid #28a745; /* Add border color to match background color */
+}
+
+.profileButton {
+  background-color: #ffc107;
+}
+
+.logoutButton {
+  background-color: #dc3545;
+  padding: 0.5rem 1rem; /* Add the same padding as the other buttons */
+}
+
+
+.logo {
+  width: auto; /* Adjust the width to fit your logo */
+  height: 80px;
+}
+
+.noProfileMessage {
+  color: red;
+  font-weight: bold;
+}
+
+
+.listingsButton {
+  background-color: #6c757d;
+  border: 1px solid #6c757d;
+}

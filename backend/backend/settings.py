@@ -150,6 +150,6 @@ AUTHENTICATION_BACKENDS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',  # Update this to the domain of your React app
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
 ]

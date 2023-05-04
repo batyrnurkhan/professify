@@ -7,12 +7,13 @@
   }
   
   .form {
-    background-color: #ffffff;
+    background-color: #333333;
     border-radius: 5px;
     padding: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
+    border-radius: 25px;
   }
   
   input {
@@ -26,7 +27,7 @@
   }
   
   button {
-    background-color: #FF69B4;
+    background-color: #28a745;
     border: none;
     color: white;
     padding: 12px 20px;
@@ -45,3 +46,6 @@
     margin-top: 10px;
   }
   
+  .textColor {
+    color: white;
+  }

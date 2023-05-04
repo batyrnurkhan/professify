@@ -6,6 +6,8 @@ const Profile = () => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const defaultProfilePicture = 'https://via.placeholder.com/150';
+
     useEffect(() => {
     const fetchProfile = async () => {
         try {
@@ -40,7 +42,11 @@ const Profile = () => {
 
   console.log(profile)
   if (!profile) {
-    return <div>Error fetching profile.</div>;
+    return (
+      <div className={styles.errorMessage}>
+        <h1>You don't have permission to view this page.</h1>
+      </div>
+    )
   }
 
   const {
@@ -59,7 +65,12 @@ const Profile = () => {
   } = profile;
 
   return (
-  <div className={styles.container}>
+    <div className={styles.container}>
+      <img
+  src={profile_picture || defaultProfilePicture}
+  alt="Profile"
+  className={styles.profilePicture}
+/>
       <h1 className={styles.heading}>Profile</h1>
       <div className={styles.info}>
         <div className={styles.label}>First Name:</div>
@@ -71,7 +82,7 @@ const Profile = () => {
       </div>
       <div className={styles.info}>
         <div className={styles.label}>Email:</div>
-        <div className={styles.value}>{profile.email}</div>
+        <div className={styles.value}>{user.email}</div>
       </div>
       <div className={styles.info}>
         <div className={styles.label}>Bio:</div>
@@ -115,6 +126,7 @@ const Profile = () => {
       </div>
     </div>
   );
+  
 };
 
 export default Profile;

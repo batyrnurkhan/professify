@@ -5,8 +5,12 @@ import Login from './Login';
 import Registration from './Registration';
 import Logout from './Logout';
 import Profile from './Profile';
-
+import Listings from './Listings';
+import ListingDetail from './ListingDetails';
+import EditListing from './EditListing';
 const MainRoutes = () => {
+
+  
   return (
     <Routes>
       <Route path="/" element={<MainPage />} />
@@ -14,6 +18,9 @@ const MainRoutes = () => {
       <Route path="/register" element={<Registration />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/listings" element={<Listings />} />
+      <Route path="/listings/:slug" element={<ListingDetail />} />
+      <Route path="/listings/:slug/edit" element={<EditListing />} />
     </Routes>
   );
 };
