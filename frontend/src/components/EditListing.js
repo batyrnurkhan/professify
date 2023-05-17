@@ -1,97 +1,109 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../Api';
+import axios from 'axios';
+import { LoggedInContext } from './LoggedInContext';
 import styles from '../css/EditListing.module.css';
 
 const EditListing = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { loggedInUser } = useContext(LoggedInContext);
+  const token = localStorage.getItem('token');
 
-  const [title, setTitle] = useState('');
+  const [listing, setListing] = useState(null);
+  const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchListing = async () => {
       try {
-        const response = await api.get(`/listings/${slug}/`);
-        setTitle(response.data.title);
-        setDescription(response.data.description);
-        setPrice(response.data.price);
+        const response = await axios.get(`/api/listings/${slug}/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+        const { name, description, price } = response.data;
+        setName(name || '');
+        setDescription(description || '');
+        setPrice(price || '');
+        setListing(response.data);
       } catch (error) {
-        console.log('Error fetching listing:', error);
+        console.error('Error fetching listing:', error);
       }
     };
+    fetchListing();
+  }, [slug, token]);
 
-    fetchData();
-  }, [slug]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('price', price);
 
     try {
-      const updatedTitle = title.trim();
-      const updatedDescription = description.trim();
-      const updatedPrice = parseFloat(price);
-
-      console.log('Updating listing:', {
-        title: updatedTitle,
-        description: updatedDescription,
-        price: updatedPrice,
+      await axios.patch(`/api/listings/${slug}/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Token ${token}`,
+        },
       });
 
-      const response = await api.patch(`/listings/${slug}/`, {
-        title: updatedTitle,
-        description: updatedDescription,
-        price: updatedPrice,
-      });
-      
-      console.log('PATCH response:', response);
-      
-
-      if (response.status === 200) {
-        navigate('/listings');
-      } else {
-        console.log('Error updating listing:', response);
-      }
+      navigate('/listings');
     } catch (error) {
-      console.log('Error updating listing:', error);
+      console.error('Error updating listing:', error);
     }
+  };
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+  };
+
+  const handlePriceChange = (event) => {
+    setPrice(event.target.value);
   };
 
   return (
     <div className={styles.container}>
       <h1>Edit Listing</h1>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <label>
-          Title:
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Description:
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Price:
-          <input
-            type="number"
-            step="0.01"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
-          />
-        </label>
-        <button type="submit">Update Listing</button>
-      </form>
+      {listing && (
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label className={styles.label}>Name:</label>
+            <input
+              type="text"
+              value={name}
+              onChange={handleNameChange}
+              className={styles.input}
+            />
+          </div>
+          <div>
+            <label className={styles.label}>Description:</label>
+            <textarea
+              value={description}
+              onChange={handleDescriptionChange}
+              className={styles.input}
+            />
+          </div>
+          <div>
+            <label className={styles.label}>Price:</label>
+            <input
+              type="number"
+              value={price}
+              onChange={handlePriceChange}
+              className={styles.input}
+            />
+          </div>
+          <button type="submit" className={styles['submit-button']}>
+            Update Listing
+          </button>
+        </form>
+      )}
     </div>
   );
 };

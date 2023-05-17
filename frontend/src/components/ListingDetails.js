@@ -34,6 +34,10 @@ const ListingDetails = () => {
     fetchListing();
   }, [slug]);
 
+  const handleListingUpdate = async () => {
+    navigate(`/listings/${slug}/edit`);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -46,21 +50,14 @@ const ListingDetails = () => {
     return <div>Listing not found</div>;
   }
 
+  const { name, description } = listing;
 
-  console.log()
   return (
     <div className={styles.container}>
-      {listing ? (
-        <>
-          <h1 className={styles.heading}>{listing.name}</h1>
-          <p>{listing.description}</p>
-          {loggedInUser && loggedInUser.id === listing.author && (
-  <button onClick={() => navigate(`/listings/${listing.slug}/edit`)}>Edit</button>
-)}
-
-        </>
-      ) : (
-        <p>Listing not found</p>
+      <h1 className={styles.heading}>{name}</h1>
+      <p>{description}</p>
+      {loggedInUser && loggedInUser.id === listing.author && (
+        <button onClick={handleListingUpdate}>Edit</button>
       )}
     </div>
   );

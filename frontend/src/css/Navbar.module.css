@@ -1,10 +1,21 @@
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  width: 8px; /* Set the width to your desired value */
+  height: 8px;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
   background-color: #333;
   color: white;
+  height: 100px;
 }
 
 .logo {
@@ -12,6 +23,8 @@
   font-weight: bold;
   text-decoration: none;
   color: white;
+  width: auto; /* Preserve the aspect ratio */
+  height: 5px;
 }
 
 .button {
@@ -24,7 +37,6 @@
   cursor: pointer;
   border-radius: 20px; /* Add border-radius for rounded edges */
 }
-
 
 .buttonGroup {
   display: flex;
@@ -44,28 +56,34 @@
   border: 1px solid #28a745; /* Add border color to match background color */
 }
 
-.profileButton {
-  background-color: #ffc107;
-}
-
+.profileButton,
 .logoutButton {
-  background-color: #dc3545;
+  background-color: #ffc107;
   padding: 0.5rem 1rem; /* Add the same padding as the other buttons */
 }
 
-
-.logo {
-  width: auto; /* Adjust the width to fit your logo */
-  height: 80px;
-}
 
 .noProfileMessage {
   color: red;
   font-weight: bold;
 }
 
-
 .listingsButton {
   background-color: #6c757d;
   border: 1px solid #6c757d;
+}
+.logoutButton {
+  background-color: red;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.resumeButton {
+  background-color: #ffc107;
+  padding: 0.5rem 1rem; /* Add the same padding as the other buttons */
+  /* Add any additional styles you want for the Resumes button */
 }

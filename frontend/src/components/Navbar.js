@@ -22,21 +22,14 @@ const Navbar = () => {
         setLocalProfile(response.data);
         setProfile(response.data);
         setLoggedInUser(response.data.user);
-        //console.log('loggedInUser in Navbar:', response.data.user);
-        //console.log("loggedInUser in Navbar after setting profile:", response.data.user);
-
         console.log("Fetched user ID:", response.data.user.id);
-
       } catch (error) {
         console.error('Error fetching profile:', error);
       }
     };
-    
 
     fetchProfile();
   }, [setProfile, setLoggedInUser]);
-
-  
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -47,17 +40,22 @@ const Navbar = () => {
   const token = localStorage.getItem('token');
   const userRoles = localStorage.getItem('userRoles') || '';
 
-  const hasProfilePermission = !!localProfile?.user && (
-    localProfile.user.is_teacher ||
-    localProfile.user.is_staff ||
-    localProfile.user.is_univer
-  );
+  const hasProfilePermission =
+    !!localProfile?.user &&
+    (localProfile.user.is_teacher ||
+      localProfile.user.is_staff ||
+      localProfile.user.is_university);
+
+  const hasResumesPermission =
+    !!localProfile?.user && localProfile.user.is_university;
 
   return (
     <div className={styles.navbar}>
-      <Link to="/" className={styles.logo}>
-        <img src={logo} alt="Logo" className={styles.logo} />
-      </Link>
+      <div className={styles.logoContainer}>
+        <Link to="/" className={styles.logoLink}>
+          <img src={logo} alt="Logo" className={styles.logoImage} />
+        </Link>
+      </div>
       <div className={styles.buttonGroup}>
         {token ? (
           <>
@@ -75,12 +73,20 @@ const Navbar = () => {
             >
               Listings
             </Link>
+            {hasResumesPermission && (
+              <Link
+                to="/resumes"
+                className={`${styles.button} ${styles.resumeButton}`}
+              >
+                Resumes
+              </Link>
+            )}
             <button
               onClick={handleLogout}
-              className={`${styles.logoutButton} ${styles.logoutButton}`}
+              className={`${styles.button} ${styles.logoutButton}`}
             >
               Logout
-            </button> 
+            </button>
           </>
         ) : (
           <>
