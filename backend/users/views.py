@@ -17,9 +17,9 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
 
 
-class CustomObtainAuthToken(ObtainAuthToken):
+class CustomObtainAuthToken(APIView):
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer = CustomUserSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
@@ -56,8 +56,10 @@ class LogoutView(APIView):
     def post(self, request, *args, **kwargs):
         logout(request)
         return Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
-    
+
 
 class ResumesView(generics.ListAPIView):
-    queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        return Profile.objects.filter(user__is_teacher=True)
