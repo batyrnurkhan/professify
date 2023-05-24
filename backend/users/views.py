@@ -1,10 +1,11 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, ProfileSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from .models import Profile, CustomUser
+from listings.models import Listing
 from .serializers import CustomUserSerializer, ProfileSerializer, UniversityViewTeacherSerializer
 from rest_framework import generics, permissions
 from .permissions import CanUpdateProfile, IsUniversity
@@ -45,6 +46,8 @@ class UserProfile(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         profile, created = Profile.objects.get_or_create(user=self.request.user)
+        listings = Listing.objects.filter(author=self.request.user)
+        profile.listings = listings
         return profile
 
     def get_serializer_context(self):
@@ -63,7 +66,7 @@ class LogoutView(APIView):
     def post(self, request, *args, **kwargs):
         logout(request)
         return Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
-    
+
 
 class ResumesView(generics.ListAPIView):
     queryset = Profile.objects.all()

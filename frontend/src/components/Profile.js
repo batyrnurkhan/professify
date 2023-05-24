@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../Api';
 import styles from '../css/Profile.module.css';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -23,9 +24,6 @@ const Profile = () => {
           response.data.user.is_univer
         ) {
           setProfile(response.data);
-          if (response.data.listings) {
-            setListings(response.data.listings);
-          }
         } else {
           setProfile(null);
         }
@@ -38,6 +36,24 @@ const Profile = () => {
     };
 
     fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await api.get('/listings/', {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+        setListings(response.data);
+      } catch (error) {
+        console.error('Error fetching listings:', error);
+      }
+    };
+
+    fetchListings();
   }, []);
 
   if (loading) {
@@ -53,54 +69,57 @@ const Profile = () => {
   }
 
   const {
-    user,
-    bio,
-    birth_date,
+    first_name,
+    last_name,
+    email,
     phone_number,
-    profile_picture,
     address,
-    city,
-    country,
-    gender,
-    age,
-    experience,
+    bio,
     skills,
+    experience,
+    profile_picture,
   } = profile;
 
   return (
     <div className={styles.container}>
       <div className={styles.profileSection}>
-        <img
-          src={profile_picture || 'https://via.placeholder.com/150'}
-          alt="Profile"
-          className={styles.profilePicture}
-        />
-        <div className={styles.nameInfo}>
-          <span className={styles.label}>First Name:</span>
-          <span className={styles.value}>{profile.first_name}</span>
+        <div className={styles.pictureBlock}>
+          <img
+            src={profile_picture || 'https://via.placeholder.com/150'}
+            alt="Profile"
+            className={styles.profilePicture}
+          />
         </div>
-        <div className={styles.nameInfo}>
-          <span className={styles.label}>Last Name:</span>
-          <span className={styles.value}>{profile.last_name}</span>
-        </div>
-        <div className={styles.nameInfo}>
-          <span className={styles.label}>Email:</span>
-          <span className={styles.value}>{user.email}</span>
-        </div>
-        <div className={styles.nameInfo}>
-          <span className={styles.label}>Phone Number:</span>
-          <span className={styles.value}>{phone_number}</span>
-        </div>
-        <div className={styles.nameInfo}>
-          <span className={styles.label}>Address:</span>
-          <span className={styles.value}>{address}</span>
+        <div className={styles.infoBlock}>
+          <div className={styles.info}>
+            <span className={styles.label}>First Name:</span>
+            <span className={styles.value}>{first_name}</span>
+          </div>
+          <div className={styles.info}>
+            <span className={styles.label}>Last Name:</span>
+            <span className={styles.value}>{last_name}</span>
+          </div>
+          <div className={styles.info}>
+            <span className={styles.label}>Email:</span>
+            <span className={styles.value}>{email}</span>
+          </div>
+          <div className={styles.info}>
+            <span className={styles.label}>Phone Number:</span>
+            <span className={styles.value}>{phone_number}</span>
+          </div>
+          <div className={styles.info}>
+            <span className={styles.label}>Address:</span>
+            <span className={styles.value}>{address}</span>
+          </div>
         </div>
       </div>
-      <div className={styles.infoSection}>
+      <div className={styles.bioSection}>
         <div className={styles.info}>
           <span className={styles.label}>Bio:</span>
           <span className={styles.value}>{bio}</span>
         </div>
+      </div>
+      <div className={styles.skillsSection}>
         <div className={styles.info}>
           <span className={styles.label}>Skills:</span>
           <span className={styles.value}>{skills}</span>
@@ -110,9 +129,16 @@ const Profile = () => {
           <span className={styles.value}>{experience}</span>
         </div>
       </div>
-      <div className={styles.thirdSection}>
-        {/* Third block content */}
-      </div>
+      <div className={styles.listingsSection}>
+        <h2>Listings:</h2>
+        {listings.map((listing) => (
+        <div key={listing.id}>
+          <h3>
+            <Link to={`/listings/${listing.slug}`}>{listing.name}</Link>
+            </h3>
+            </div>
+  ))}
+</div>
     </div>
   );
 };

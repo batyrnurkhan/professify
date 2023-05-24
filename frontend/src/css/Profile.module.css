@@ -1,34 +1,37 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: flex-start;
-  min-height: 100vh; /* Ensure the container takes up the full height of the viewport */
-  padding-bottom: 20px; /* Add space at the bottom of the container */
 }
 
 .profileSection {
   display: flex;
   align-items: flex-start;
-  margin-left: 20px; /* Add space to the left side of the profile section */
+  margin-bottom: 20px;
 }
 
 .profilePicture {
-  width: 200px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 5px;
+  flex: 0 0 auto;
+  width: 240px; /* Adjust the width to your preference */
+  height: 180px; /* Adjust the height to maintain the 4x3 aspect ratio */
+  margin-right: 20px;
 }
 
-.nameInfo {
-  margin-left: 10px; /* Add space between profile picture and name info */
-}
 
-.infoSection {
-  flex: 1;
+.firstBlock {
   display: flex;
-  flex-direction: column; /* Display the data vertically */
-  margin-left: 20px; /* Add space to the left side of the info section */
+  flex-direction: column;
+}
+
+.secondBlock {
+  margin-bottom: 20px;
+}
+
+.thirdBlock {
+  margin-bottom: 20px;
+}
+.info {
+  margin-bottom: 10px;
 }
 
 .label {
@@ -37,9 +40,4 @@
 
 .value {
   margin-left: 5px;
-}
-
-.thirdSection {
-  margin-top: 20px;
-  /* Add your styles for the third section here */
 }
