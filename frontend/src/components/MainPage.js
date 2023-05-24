@@ -1,22 +1,19 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
 import styles from '../css/Main.module.css';
 
 const MainPage = () => {
-    return (
-    <div>
-        <div className={styles.container}>
-        <h1>Welcome to Professify!</h1>
-        <p className={styles.text}>
-        Professify is an online platform that connects teachers and universities. Our mission is to bridge the gap between educational institutions and talented educators, providing a space where they can find each other and collaborate for a better learning experience.
-        </p>
-        <div className={styles.line}></div>
-        <p className={styles.text}>
-        In recent years, there has been a shortage of qualified staff in universities, leading to a decline in the quality of educational materials. Professify aims to tackle this issue by offering an efficient way for universities to discover and hire highly skilled teachers who are passionate about sharing their knowledge and contributing to the growth of the academic community.
-        </p>
-        </div>
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.heading}>Welcome to the Higher Education Ecosystem</h1>
+      <p className={styles.text}>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque convallis enim id dictum. In consequat felis quis tristique placerat. Suspendisse nec metus sed est aliquet pharetra vel sed felis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras et lacus orci. 
+      </p>
+      <div className={styles.line}></div>
+      <p className={styles.text}>
+        Nunc euismod tellus ut tristique auctor. Duis dapibus purus mauris, at tristique velit tempor eu. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras in enim luctus, ultrices lectus eu, gravida mi. Fusce id efficitur arcu. Suspendisse eget semper orci. 
+      </p>
     </div>
-    );
+  );
 };
 
 export default MainPage;

@@ -3,35 +3,39 @@ import api from '../Api';
 import styles from '../css/Profile.module.css';
 
 const Profile = () => {
-    const [profile, setProfile] = useState(null);
-    const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [listings, setListings] = useState([]);
 
-    const defaultProfilePicture = 'https://via.placeholder.com/150';
-
-    useEffect(() => {
+  useEffect(() => {
     const fetchProfile = async () => {
-        try {
+      try {
         const token = localStorage.getItem('token');
         const response = await api.get('/users/profile/', {
-            headers: {
+          headers: {
             Authorization: `Token ${token}`,
-        },
+          },
         });
+
         if (
-            response.data.user.is_teacher ||
-            response.data.user.is_staff ||
-            response.data.user.is_univer
-          ) {
-            setProfile(response.data);
-          } else {
-            setProfile(null);
+          response.data.user.is_teacher ||
+          response.data.user.is_staff ||
+          response.data.user.is_univer
+        ) {
+          setProfile(response.data);
+          if (response.data.listings) {
+            setListings(response.data.listings);
           }
-          setLoading(false);
-        } catch (error) {
-          console.error('Error fetching profile:', error);
-          setLoading(false);
+        } else {
+          setProfile(null);
         }
-      };
+
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+        setLoading(false);
+      }
+    };
 
     fetchProfile();
   }, []);
@@ -40,13 +44,12 @@ const Profile = () => {
     return <div>Loading...</div>;
   }
 
-  console.log(profile)
   if (!profile) {
     return (
       <div className={styles.errorMessage}>
         <h1>You don't have permission to view this page.</h1>
       </div>
-    )
+    );
   }
 
   const {
@@ -66,67 +69,52 @@ const Profile = () => {
 
   return (
     <div className={styles.container}>
-      <img
-  src={profile_picture || defaultProfilePicture}
-  alt="Profile"
-  className={styles.profilePicture}
-/>
-      <h1 className={styles.heading}>Profile</h1>
-      <div className={styles.info}>
-        <div className={styles.label}>First Name:</div>
-        <div className={styles.value}>{profile.first_name}</div>
+      <div className={styles.profileSection}>
+        <img
+          src={profile_picture || 'https://via.placeholder.com/150'}
+          alt="Profile"
+          className={styles.profilePicture}
+        />
+        <div className={styles.nameInfo}>
+          <span className={styles.label}>First Name:</span>
+          <span className={styles.value}>{profile.first_name}</span>
+        </div>
+        <div className={styles.nameInfo}>
+          <span className={styles.label}>Last Name:</span>
+          <span className={styles.value}>{profile.last_name}</span>
+        </div>
+        <div className={styles.nameInfo}>
+          <span className={styles.label}>Email:</span>
+          <span className={styles.value}>{user.email}</span>
+        </div>
+        <div className={styles.nameInfo}>
+          <span className={styles.label}>Phone Number:</span>
+          <span className={styles.value}>{phone_number}</span>
+        </div>
+        <div className={styles.nameInfo}>
+          <span className={styles.label}>Address:</span>
+          <span className={styles.value}>{address}</span>
+        </div>
       </div>
-      <div className={styles.info}>
-        <div className={styles.label}>Last Name:</div>
-        <div className={styles.value}>{profile.last_name}</div>
+      <div className={styles.infoSection}>
+        <div className={styles.info}>
+          <span className={styles.label}>Bio:</span>
+          <span className={styles.value}>{bio}</span>
+        </div>
+        <div className={styles.info}>
+          <span className={styles.label}>Skills:</span>
+          <span className={styles.value}>{skills}</span>
+        </div>
+        <div className={styles.info}>
+          <span className={styles.label}>Experience:</span>
+          <span className={styles.value}>{experience}</span>
+        </div>
       </div>
-      <div className={styles.info}>
-        <div className={styles.label}>Email:</div>
-        <div className={styles.value}>{user.email}</div>
-      </div>
-      <div className={styles.info}>
-        <div className={styles.label}>Bio:</div>
-        <div className={styles.value}>{profile.bio}</div>
-      </div>
-      <div className={styles.info}>
-        <div className={styles.label}>Birth Date:</div>
-        <div className={styles.value}>{profile.birth_date}</div>
-      </div>
-      <div className={styles.info}>
-        <div className={styles.label}>Phone Number:</div>
-        <div className={styles.value}>{profile.phone_number}</div>
-      </div>
-      <div className={styles.info}>
-        <div className={styles.label}>Address:</div>
-        <div className={styles.value}>{profile.address}</div>
-      </div>
-      <div className={styles.info}>
-        <div className={styles.label}>City:</div>
-        <div className={styles.value}>{profile.city}</div>
-      </div>
-      <div className={styles.info}>
-        <div className={styles.label}>Country:</div>
-        <div className={styles.value}>{profile.country}</div>
-      </div>
-      <div className={styles.info}>
-        <div className={styles.label}>Gender:</div>
-        <div className={styles.value}>{profile.gender}</div>
-      </div>
-      <div className={styles.info}>
-        <div className={styles.label}>Age:</div>
-        <div className={styles.value}>{profile.age}</div>
-      </div>
-      <div className={styles.info}>
-        <div className={styles.label}>Experience:</div>
-        <div className={styles.value}>{profile.experience}</div>
-      </div>
-      <div className={styles.info}>
-        <div className={styles.label}>Skills:</div>
-        <div className={styles.value}>{profile.skills}</div>
+      <div className={styles.thirdSection}>
+        {/* Third block content */}
       </div>
     </div>
   );
-  
 };
 
 export default Profile;

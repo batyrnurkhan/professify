@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import api from '../Api';
 import Navbar from '../components/Navbar';
-import styles from '../css/Login.module.css'; // Import the CSS module
 import { useNavigate } from 'react-router-dom';
 import { LoggedInContext } from '../components/LoggedInContext';
+import styles from '../css/Login.module.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -20,9 +20,9 @@ const Login = () => {
         username: username,
         password: password,
       });
-  
+
       console.log('Login response:', response);
-  
+
       if (response.status === 200) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('username', username);
@@ -37,32 +37,34 @@ const Login = () => {
       setError('Something went wrong. Please try again.');
     }
   };
-  
-  
-  
-  
+
   return (
-    <div>
-      <div className={styles.container}>
+    <div className={styles.container}>
+      <div className={styles.blueSection}>
+        <h1>Welcome to Professify!</h1>
+        <p>Discover a world of opportunities in education.</p>
+      </div>
+      <div className={styles.whiteSection}>
         <form onSubmit={handleSubmit} className={styles.form}>
-          <label className={`${styles.textColor}`}>
-            Email:
+          <h2>Login</h2>
+          <label>
             <input
               type="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
               className={styles.input}
+              placeholder="Email"
             />
           </label>
-          <label className={`${styles.textColor}`}>
-            Password:
+          <label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               className={styles.input}
+              placeholder="Password"
             />
           </label>
           <button type="submit" className={styles.button}>
