@@ -17,20 +17,27 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
 
 
-class CustomObtainAuthToken(APIView):
+class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        serializer = CustomUserSerializer(data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'email': user.email,
-            'is_staff': user.is_staff,
-            'is_teacher': user.is_teacher,
-            'is_university': user.is_university,
-            'is_default': user.is_default,
-        })
+        # Delegate the token generation to the built-in ObtainAuthToken view
+        response = super().post(request, *args, **kwargs)
+        token = response.data.get('token')
+
+        if token:
+            # Retrieve the user associated with the token
+            user = Token.objects.get(key=token).user
+
+            # Customize the response data as needed
+            response.data = {
+                'token': token,
+                'email': user.email,
+                'is_staff': user.is_staff,
+                'is_teacher': user.is_teacher,
+                'is_university': user.is_university,
+                'is_default': user.is_default
+            }
+
+        return response
 
 class UserProfile(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../Api';
 import styles from '../css/Listings.module.css';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // Add this import
 
 const Listings = () => {
   const [listings, setListings] = useState([]);
@@ -42,8 +42,7 @@ const Listings = () => {
                 <h2>{listing.name}</h2>
               </Link>
               <p>{listing.description}</p>
-              <p>Price: {listing.price}</p> {/* Add this line to display the price */}
-              {parseInt(localStorage.getItem('user_id')) === listing.author && (
+              {parseInt(localStorage.getItem("user_id")) === listing.author && (
                 <button>Edit</button>
               )}
             </div>
