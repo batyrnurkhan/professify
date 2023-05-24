@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import api from '../Api';
 import styles from '../css/Resumes.module.css';
 
@@ -13,7 +12,11 @@ const Resumes = () => {
 
   const fetchProfiles = async () => {
     try {
-      const response = await api.get('/users/resumes/');
+      const response = await api.get('/users/resumes/', {
+        params: {
+          is_teacher: true,
+        },
+      });
       setProfiles(response.data);
       setLoading(false);
     } catch (error) {
@@ -23,21 +26,20 @@ const Resumes = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className={styles.loadingMessage}>Loading...</div>;
   }
 
-  return (
-    <div className={styles.resumesContainer}>
-      <h1 className={styles.heading}>Resumes</h1>
-      {profiles.map((profile) => (
-        <div key={profile.id} className={styles.profileContainer}>
-          <Link to={`/api/users/resumes/${profile.id}`}>
-  <h2>{`${profile.id}`}</h2>
-</Link>
+  const teacherProfiles = profiles.filter((profile) => profile.user.is_teacher);
 
-          <p className={styles.bio}>Bio: {profile.bio}</p>
-          <p className={styles.experience}>Experience: {profile.experience}</p>
-          <p className={styles.skills}>Skills: {profile.skills}</p>
+  return (
+    <div>
+      <h1>Resumes</h1>
+      {teacherProfiles.map((profile) => (
+        <div key={profile.id} className={styles.resumeContainer}>
+          <h2>{`${profile.id}`}</h2>
+          <p>Bio: {profile.bio}</p>
+          <p>Experience: {profile.experience}</p>
+          <p>Skills: {profile.skills}</p>
         </div>
       ))}
     </div>

@@ -63,10 +63,8 @@ class LogoutView(APIView):
     def post(self, request, *args, **kwargs):
         logout(request)
         return Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
-
+    
 
 class ResumesView(generics.ListAPIView):
+    queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-
-    def get_queryset(self):
-        return Profile.objects.filter(user__is_teacher=True)
