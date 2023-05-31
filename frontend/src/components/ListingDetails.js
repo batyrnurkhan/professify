@@ -46,21 +46,31 @@ const ListingDetails = () => {
     return <div>Listing not found</div>;
   }
 
-
-  console.log()
   return (
     <div className={styles.container}>
-      {listing ? (
-        <>
-          <h1 className={styles.heading}>{listing.name}</h1>
+      <h1 className={styles.heading}>{listing.name}</h1>
+      <div className={styles.details}>
+        <div className={styles.description}>
+          <h3>Description:</h3>
           <p>{listing.description}</p>
-          {loggedInUser && loggedInUser.id === listing.author && (
-  <button onClick={() => navigate(`/listings/${listing.slug}/edit`)}>Edit</button>
-)}
-
-        </>
-      ) : (
-        <p>Listing not found</p>
+        </div>
+        <div className={styles.info}>
+          <h3>Details:</h3>
+          <p>
+            <strong>Modules Count:</strong> {listing.modules_count}
+          </p>
+          <p>
+            <strong>Price:</strong> {listing.price}
+          </p>
+          <p>
+            <strong>Author:</strong> {listing.author}
+          </p>
+        </div>
+      </div>
+      {loggedInUser && loggedInUser.id === listing.author && (
+        <button className={styles.editButton} onClick={() => navigate(`/listings/${listing.slug}/edit`)}>
+          Edit
+        </button>
       )}
     </div>
   );

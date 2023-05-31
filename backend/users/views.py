@@ -15,20 +15,15 @@ from django.contrib.auth import logout
 
 class CreateUserView(generics.CreateAPIView):
     serializer_class = CustomUserSerializer
-    permission_classes = (AllowAny,)
-
+    permission_classes = (permissions.AllowAny,)
 
 class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        # Delegate the token generation to the built-in ObtainAuthToken view
         response = super().post(request, *args, **kwargs)
         token = response.data.get('token')
 
         if token:
-            # Retrieve the user associated with the token
             user = Token.objects.get(key=token).user
-
-            # Customize the response data as needed
             response.data = {
                 'token': token,
                 'email': user.email,
@@ -44,10 +39,30 @@ class UserProfile(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [permissions.IsAuthenticated, CanUpdateProfile]
 
+    def post(self, request, *args, **kwargs):
+        user = request.user
+
+        if user.is_teacher:
+            return Response({"message": "User is already a teacher"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.is_teacher = True
+        user.save()
+
+        profile, created = Profile.objects.get_or_create(user=user)
+        serializer = self.get_serializer(profile)
+        return Response(serializer.data)
+
     def get_object(self):
-        profile, created = Profile.objects.get_or_create(user=self.request.user)
-        listings = Listing.objects.filter(author=self.request.user)
-        profile.listings = listings
+        user = self.request.user
+
+        # Check if the user has the required permission (is_teacher)
+        if not user.is_teacher:
+            # Return 403 Forbidden response if the user does not have the permission
+            self.permission_denied(self.request)
+
+        # Retrieve or create the user's profile
+        profile, created = Profile.objects.get_or_create(user=user)
+
         return profile
 
     def get_serializer_context(self):
@@ -62,11 +77,10 @@ class UniversityViewTeachers(generics.ListAPIView):
     def get_queryset(self):
         return CustomUser.objects.filter(is_teacher=True)
 
-class LogoutView(APIView):
+class LogoutView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         logout(request)
         return Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
-
 
 class ResumesView(generics.ListAPIView):
     queryset = Profile.objects.all()

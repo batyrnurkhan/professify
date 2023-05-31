@@ -8,8 +8,6 @@ const Registration = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -18,8 +16,6 @@ const Registration = () => {
       const response = await api.post('/users/register/', {
         email: email,
         password: password,
-        first_name: firstName,
-        last_name: lastName,
       });
 
       if (response.status === 201) {
@@ -46,26 +42,6 @@ const Registration = () => {
         <div className={styles.whiteSection}>
           <h2>Register</h2>
           <form onSubmit={handleSubmit} className={styles.form}>
-            <label className={styles.label}>
-              <input
-                type="text"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                required
-                className={styles.input}
-                placeholder="First Name"
-              />
-            </label>
-            <label className={styles.label}>
-              <input
-                type="text"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                required
-                className={styles.input}
-                placeholder="Last Name"
-              />
-            </label>
             <label className={styles.label}>
               <input
                 type="email"

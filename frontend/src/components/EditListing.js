@@ -7,7 +7,7 @@ const EditListing = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState('');
+  const [listing, setListing] = useState(null);
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
 
@@ -15,7 +15,7 @@ const EditListing = () => {
     const fetchData = async () => {
       try {
         const response = await api.get(`/listings/${slug}/`);
-        setTitle(response.data.title);
+        setListing(response.data);
         setDescription(response.data.description);
         setPrice(response.data.price);
       } catch (error) {
@@ -30,27 +30,21 @@ const EditListing = () => {
     e.preventDefault();
 
     try {
-      const updatedTitle = title.trim();
       const updatedDescription = description.trim();
       const updatedPrice = parseFloat(price);
 
       console.log('Updating listing:', {
-        title: updatedTitle,
         description: updatedDescription,
         price: updatedPrice,
       });
 
       const response = await api.patch(`/listings/${slug}/`, {
-        title: updatedTitle,
         description: updatedDescription,
         price: updatedPrice,
       });
-      
-      console.log('PATCH response:', response);
-      
 
       if (response.status === 200) {
-        navigate('/listings');
+        navigate(`/listings/${slug}`);
       } else {
         console.log('Error updating listing:', response);
       }
@@ -67,9 +61,8 @@ const EditListing = () => {
           Title:
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
+            value={listing ? listing.name: ''}
+            disabled
           />
         </label>
         <label>

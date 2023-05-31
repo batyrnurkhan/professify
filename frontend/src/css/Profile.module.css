@@ -1,43 +1,67 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  padding: 2rem;
 }
 
 .profileSection {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
+}
+
+.leftBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 2rem;
+  background-color: #f0f0f0;
+  padding: 1rem;
 }
 
 .profilePicture {
-  flex: 0 0 auto;
-  width: 240px; /* Adjust the width to your preference */
-  height: 180px; /* Adjust the height to maintain the 4x3 aspect ratio */
-  margin-right: 20px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-
-.firstBlock {
-  display: flex;
-  flex-direction: column;
+.rightBlock {
+  flex: 1;
+  background-color: #f0f0f0;
+  padding: 1rem;
 }
 
-.secondBlock {
-  margin-bottom: 20px;
+.nameBlock {
+  margin-top: 1rem;
 }
 
-.thirdBlock {
-  margin-bottom: 20px;
-}
-.info {
-  margin-bottom: 10px;
-}
-
-.label {
+.firstName {
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
-.value {
-  margin-left: 5px;
+.lastName {
+  font-size: 1.2rem;
+  color: #777;
+}
+
+.skillsBlock {
+  margin-top: 1rem;
+}
+
+.skills {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.listingsBlock {
+  background-color: #f0f0f0;
+  margin-top: 2rem;
+}
+
+.listingItem {
+  margin-bottom: 1rem;
+}
+
+.navbar {
+  margin-bottom: 2rem;
 }

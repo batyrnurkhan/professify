@@ -8,6 +8,7 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
+        extra_fields.setdefault('is_teacher', True)  # Assign the 'is_teacher' role
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -20,8 +21,6 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
@@ -31,7 +30,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.email
@@ -44,8 +43,8 @@ class Profile(models.Model):
     )
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
     bio = models.TextField(blank=True)
     birth_date = models.DateField(null=True, blank=True)
     phone_number = models.CharField(max_length=15, blank=True)
@@ -61,7 +60,6 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.email} - Profile"
 
-
 @receiver(post_save, sender=CustomUser)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -69,10 +67,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):
-    if not hasattr(instance, 'profile'):
-        Profile.objects.create(user=instance)
     instance.profile.save()
-
 
 class TeacherUser(CustomUser):
     class Meta:

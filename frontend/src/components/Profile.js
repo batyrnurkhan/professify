@@ -21,7 +21,7 @@ const Profile = () => {
         if (
           response.data.user.is_teacher ||
           response.data.user.is_staff ||
-          response.data.user.is_univer
+          response.data.user.is_university
         ) {
           setProfile(response.data);
         } else {
@@ -83,62 +83,43 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <div className={styles.profileSection}>
-        <div className={styles.pictureBlock}>
-          <img
-            src={profile_picture || 'https://via.placeholder.com/150'}
-            alt="Profile"
-            className={styles.profilePicture}
-          />
+        <div className={styles.leftBlock}>
+          <div className={styles.pictureBlock}>
+            <img
+              src={profile_picture || 'https://via.placeholder.com/150'}
+              alt="Profile"
+              className={styles.profilePicture}
+            />
+          </div>
+          <div className={styles.nameBlock}>
+            <div className={styles.firstName}>{first_name}</div>
+            <div className={styles.lastName}>{last_name}</div>
+          </div>
+          <div className={styles.skillsBlock}>
+            <div className={styles.skills}>{skills}</div>
+          </div>
         </div>
-        <div className={styles.infoBlock}>
-          <div className={styles.info}>
-            <span className={styles.label}>First Name:</span>
-            <span className={styles.value}>{first_name}</span>
+        <div className={styles.rightBlock}>
+          <div className={styles.bioBlock}>
+            <h2>Bio</h2>
+            <p>{bio}</p>
           </div>
-          <div className={styles.info}>
-            <span className={styles.label}>Last Name:</span>
-            <span className={styles.value}>{last_name}</span>
-          </div>
-          <div className={styles.info}>
-            <span className={styles.label}>Email:</span>
-            <span className={styles.value}>{email}</span>
-          </div>
-          <div className={styles.info}>
-            <span className={styles.label}>Phone Number:</span>
-            <span className={styles.value}>{phone_number}</span>
-          </div>
-          <div className={styles.info}>
-            <span className={styles.label}>Address:</span>
-            <span className={styles.value}>{address}</span>
+          <div className={styles.experienceBlock}>
+            <h2>Experience</h2>
+            <p>{experience}</p>
           </div>
         </div>
       </div>
-      <div className={styles.bioSection}>
-        <div className={styles.info}>
-          <span className={styles.label}>Bio:</span>
-          <span className={styles.value}>{bio}</span>
-        </div>
-      </div>
-      <div className={styles.skillsSection}>
-        <div className={styles.info}>
-          <span className={styles.label}>Skills:</span>
-          <span className={styles.value}>{skills}</span>
-        </div>
-        <div className={styles.info}>
-          <span className={styles.label}>Experience:</span>
-          <span className={styles.value}>{experience}</span>
-        </div>
-      </div>
-      <div className={styles.listingsSection}>
-        <h2>Listings:</h2>
+      <div className={styles.listingsBlock}>
+        <h2>Listings</h2>
         {listings.map((listing) => (
-        <div key={listing.id}>
-          <h3>
-            <Link to={`/listings/${listing.slug}`}>{listing.name}</Link>
+          <div key={listing.id} className={styles.listingItem}>
+            <h3>
+              <Link to={`/listings/${listing.slug}`}>{listing.name}</Link>
             </h3>
-            </div>
-  ))}
-</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
