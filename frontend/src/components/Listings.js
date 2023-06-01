@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../Api';
 import styles from '../css/Listings.module.css';
-import { Link } from 'react-router-dom'; // Add this import
+import { Link } from 'react-router-dom';
 
 const Listings = () => {
   const [listings, setListings] = useState([]);
@@ -38,11 +38,14 @@ const Listings = () => {
         {listings.map((listing) => {
           return (
             <div key={listing.id} className={styles.listing}>
-              <Link to={`/listings/${listing.slug}`}>
-                <h2>{listing.name}</h2>
-              </Link>
-              <p>{listing.description}</p>
-              {parseInt(localStorage.getItem("user_id")) === listing.author && (
+              <img src={listing.picture} alt={listing.name} className={styles.picture} />
+              <div className={styles.details}>
+                <Link to={`/listings/${listing.slug}`}>
+                  <h2 className={styles.name}>{listing.name}</h2>
+                </Link>
+                <p className={styles.description}>{listing.description}</p>
+              </div>
+              {parseInt(localStorage.getItem('user_id')) === listing.author && (
                 <button>Edit</button>
               )}
             </div>

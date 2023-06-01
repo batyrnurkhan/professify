@@ -9,6 +9,7 @@ class Listing(models.Model):
     modules_count = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    picture = models.ImageField(upload_to='listings/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

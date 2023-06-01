@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../Api';
 import styles from '../css/Profile.module.css';
 import { Link } from 'react-router-dom';
@@ -21,7 +22,7 @@ const Profile = () => {
         if (
           response.data.user.is_teacher ||
           response.data.user.is_staff ||
-          response.data.user.is_university
+          response.data.user.is_univer
         ) {
           setProfile(response.data);
         } else {
@@ -56,6 +57,12 @@ const Profile = () => {
     fetchListings();
   }, []);
 
+  const navigate = useNavigate();
+
+  const handleEditProfile = () => {
+    navigate('/edit-profile');
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -71,7 +78,6 @@ const Profile = () => {
   const {
     first_name,
     last_name,
-    email,
     phone_number,
     address,
     bio,
@@ -79,6 +85,8 @@ const Profile = () => {
     experience,
     profile_picture,
   } = profile;
+
+  const email = profile.user.email;
 
   return (
     <div className={styles.container}>
@@ -92,26 +100,43 @@ const Profile = () => {
             />
           </div>
           <div className={styles.nameBlock}>
-            <div className={styles.firstName}>{first_name}</div>
-            <div className={styles.lastName}>{last_name}</div>
+            <span>{first_name}</span>
+            <span>{last_name}</span>
           </div>
           <div className={styles.skillsBlock}>
-            <div className={styles.skills}>{skills}</div>
+            <span>{skills}</span>
           </div>
+          <button className={styles.editButton} onClick={handleEditProfile}>
+            Edit
+          </button>
         </div>
         <div className={styles.rightBlock}>
+          <div className={styles.contactBlock}>
+            <div className={styles.contactInfo}>
+              <span className={styles.label}>Email:</span>
+              <span>{email}</span>
+            </div>
+            <div className={styles.contactInfo}>
+              <span className={styles.label}>Phone Number:</span>
+              <span>{phone_number}</span>
+            </div>
+            <div className={styles.contactInfo}>
+              <span className={styles.label}>Address:</span>
+              <span>{address}</span>
+            </div>
+          </div>
           <div className={styles.bioBlock}>
-            <h2>Bio</h2>
-            <p>{bio}</p>
+            <span className={styles.label}>Bio:</span>
+            <span>{bio}</span>
           </div>
           <div className={styles.experienceBlock}>
-            <h2>Experience</h2>
-            <p>{experience}</p>
+            <span className={styles.label}>Experience:</span>
+            <span>{experience}</span>
           </div>
         </div>
       </div>
       <div className={styles.listingsBlock}>
-        <h2>Listings</h2>
+        <h2>Listings:</h2>
         {listings.map((listing) => (
           <div key={listing.id} className={styles.listingItem}>
             <h3>

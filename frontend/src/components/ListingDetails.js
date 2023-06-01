@@ -48,30 +48,29 @@ const ListingDetails = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>{listing.name}</h1>
       <div className={styles.details}>
-        <div className={styles.description}>
-          <h3>Description:</h3>
-          <p>{listing.description}</p>
-        </div>
         <div className={styles.info}>
-          <h3>Details:</h3>
-          <p>
+          <h1 className={styles.name}>{listing.name}</h1>
+          <p className={styles.description}>{listing.description}</p>
+          <p className={styles.modulesCount}>
             <strong>Modules Count:</strong> {listing.modules_count}
           </p>
-          <p>
+          <p className={styles.price}>
             <strong>Price:</strong> {listing.price}
           </p>
-          <p>
+          <p className={styles.author}>
             <strong>Author:</strong> {listing.author}
           </p>
         </div>
+        <div className={styles.picture}>
+          <img src={listing.picture} alt="Listing" />
+          {loggedInUser && loggedInUser.id === listing.author && (
+            <button className={styles.editButton} onClick={() => navigate(`/listings/${listing.slug}/edit`)}>
+              Edit
+            </button>
+          )}
+        </div>
       </div>
-      {loggedInUser && loggedInUser.id === listing.author && (
-        <button className={styles.editButton} onClick={() => navigate(`/listings/${listing.slug}/edit`)}>
-          Edit
-        </button>
-      )}
     </div>
   );
 };

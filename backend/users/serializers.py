@@ -14,11 +14,20 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
-
+    
     class Meta:
         model = Profile
-        fields = ('id', 'user', 'first_name', 'last_name',  'bio', 'birth_date', 'phone_number', 'profile_picture', 'address', 'city', 'country', 'gender', 'age', 'experience', 'skills')
+        fields = ('id', 'user', 'first_name', 'last_name', 'bio', 'birth_date', 'phone_number', 'profile_picture', 'address', 'city', 'country', 'gender', 'age', 'experience', 'skills')
+        read_only_fields = ('id', 'user')
 
+class UpdateProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('first_name', 'last_name', 'bio', 'birth_date', 'phone_number', 'profile_picture', 'address', 'city', 'country', 'gender', 'age', 'experience', 'skills')
+        extra_kwargs = {
+            'first_name': {'required': False},
+            'last_name': {'required': False},
+        }
 
 
 class UniversityViewTeacherSerializer(serializers.ModelSerializer):

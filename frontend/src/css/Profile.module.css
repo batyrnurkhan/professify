@@ -35,8 +35,8 @@
 }
 
 .firstName {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.2rem;
+  color: #777;
 }
 
 .lastName {
@@ -53,9 +53,27 @@
   color: #555;
 }
 
-.listingsBlock {
-  background-color: #f0f0f0;
+.contactBlock {
+  margin-top: 1rem;
+}
+
+.contactInfo {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.bioBlock {
   margin-top: 2rem;
+}
+
+.experienceBlock {
+  margin-top: 2rem;
+}
+
+.listingsBlock {
+  margin-top: 2rem;
+  background-color: #f0f0f0;
+  padding: 1rem;
 }
 
 .listingItem {
@@ -64,4 +82,30 @@
 
 .navbar {
   margin-bottom: 2rem;
+}
+
+.editButton {
+  margin-top: 1rem;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none; /* Remove underline */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.editButton:hover {
+  background-color: #45a049;
+}
+
+.editButtonIcon {
+  margin-right: 0.5rem;
 }

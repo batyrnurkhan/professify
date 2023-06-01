@@ -6,12 +6,13 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from .models import Profile, CustomUser
 from listings.models import Listing
-from .serializers import CustomUserSerializer, ProfileSerializer, UniversityViewTeacherSerializer
+from .serializers import CustomUserSerializer, ProfileSerializer, UniversityViewTeacherSerializer, UpdateProfileSerializer
 from rest_framework import generics, permissions
 from .permissions import CanUpdateProfile, IsUniversity
 from rest_framework import status
 from rest_framework.views import APIView
 from django.contrib.auth import logout
+from rest_framework.permissions import IsAuthenticated
 
 class CreateUserView(generics.CreateAPIView):
     serializer_class = CustomUserSerializer
@@ -37,20 +38,17 @@ class CustomObtainAuthToken(ObtainAuthToken):
 
 class UserProfile(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
-    permission_classes = [permissions.IsAuthenticated, CanUpdateProfile]
+    permission_classes = [IsAuthenticated, CanUpdateProfile]
 
-    def post(self, request, *args, **kwargs):
-        user = request.user
-
-        if user.is_teacher:
-            return Response({"message": "User is already a teacher"}, status=status.HTTP_400_BAD_REQUEST)
-
-        user.is_teacher = True
-        user.save()
-
+    def get_object(self):
+        user = self.request.user
         profile, created = Profile.objects.get_or_create(user=user)
-        serializer = self.get_serializer(profile)
-        return Response(serializer.data)
+        return profile
+
+    def get_serializer_class(self):
+        if self.request.method == 'PUT' or self.request.method == 'PATCH':
+            return UpdateProfileSerializer
+        return ProfileSerializer
 
     def get_object(self):
         user = self.request.user

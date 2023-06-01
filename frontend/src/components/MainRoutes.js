@@ -9,6 +9,7 @@ import Listings from './Listings';
 import ListingDetail from './ListingDetails';
 import EditListing from './EditListing';
 import Resumes from './Resumes';
+import EditProfile from './EditProfile'; 
 
 const MainRoutes = () => {
   return (
@@ -18,6 +19,7 @@ const MainRoutes = () => {
       <Route path="/register" element={<Registration />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/edit-profile" element={<EditProfile />} /> // Add the EditProfile route
       <Route path="/listings" element={<Listings />} />
       <Route path="/listings/:slug" element={<ListingDetail />} />
       <Route path="/listings/:slug/edit" element={<EditListing />} />
