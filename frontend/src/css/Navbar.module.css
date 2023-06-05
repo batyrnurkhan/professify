@@ -2,79 +2,66 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #6b6464;
-  color: #201d1d;
+  padding: 20px 40px;
+  background-color: #455a64;
 }
 
 .logo {
-  font-size: 2rem;
-  font-weight: bold;
-  text-decoration: none;
-  color: #333;
+  width: 100px;
 }
 
-.button {
-  text-decoration: none;
-  color: #333;
-  background-color: #e0e0e0;
+.button, .universityButton, .teacherButton, .loginButton, .registerButton, .logoutButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 35px;
+  line-height: 35px;
+  margin-left: 15px;
+  padding: 0;
   border: none;
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
+  border-radius: 5px;
+  background-color: #546e7a;
+  color: #FFFFFF;
   cursor: pointer;
-  border-radius: 30px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
+  text-decoration: none;
 }
 
 .buttonGroup {
   display: flex;
 }
 
-.buttonGroup .button + .button {
-  margin-left: 1rem;
+.dropdown {
+  display: inline-block;
+  position: relative;
+  width: 110px;
 }
 
-.loginButton {
-  background-color: #1976d2;
-  color: #fff;
+.dropdownContent {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
 }
 
-.registerButton {
-  background-color: #388e3c;
-  color: #fff;
+.dropdownContent .dropdownLink {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
 }
 
-.profileButton {
-  background-color: #fbc02d;
-  color: #333;
+.dropdownContent .dropdownLink:hover {
+  background-color: #f1f1f1;
 }
 
-.logoutButton {
-  background-color: #d32f2f;
-  color: #fff;
-  font-weight: bold;
+.dropdown:hover .dropdownContent {
+  display: block;
 }
 
-.logoutButton:hover {
-  background-color: #b71c1c;
-}
-
-.logo {
-  width: 120px;
-  height: 60px;
-}
-
-.noProfileMessage {
-  color: red;
-  font-weight: bold;
-}
-
-.listingsButton {
-  background-color: #757575;
-  color: #fff;
-}
-
-.resumesButton {
-  background-color: #ff5722;
-  color: #fff;
+.dropdown:hover .universityButton, .dropdown:hover .teacherButton {
+  background-color: #3e8e41;
 }

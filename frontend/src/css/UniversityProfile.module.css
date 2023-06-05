@@ -1,0 +1,40 @@
+.container {
+    margin: 20px;
+  }
+  
+  .profileSection {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profilePicture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+  
+  .profileInfo {
+    flex: 1;
+  }
+  
+  .profileInfo h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .profileInfo p {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  
+  .profileInfo .label {
+    font-weight: bold;
+  }
+  
+  .buttonContainer {
+    margin-top: 20px;
+  }
+  

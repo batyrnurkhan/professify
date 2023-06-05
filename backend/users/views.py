@@ -1,22 +1,18 @@
-from rest_framework import generics
-from rest_framework.permissions import AllowAny
-from .serializers import CustomUserSerializer, ProfileSerializer
+from rest_framework import generics, permissions, status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from .models import Profile, CustomUser
-from listings.models import Listing
-from .serializers import CustomUserSerializer, ProfileSerializer, UniversityViewTeacherSerializer, UpdateProfileSerializer
-from rest_framework import generics, permissions
-from .permissions import CanUpdateProfile, IsUniversity
-from rest_framework import status
-from rest_framework.views import APIView
 from django.contrib.auth import logout
-from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+from .models import CustomUser, TeacherProfile, UniversityProfile
+from .serializers import * 
+from .permissions import CanUpdateProfile, IsUniversity, IsTeacher, IsTeacherOrUniversity
+
 
 class CreateUserView(generics.CreateAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = (permissions.AllowAny,)
+
 
 class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -36,37 +32,36 @@ class CustomObtainAuthToken(ObtainAuthToken):
 
         return response
 
-class UserProfile(generics.RetrieveUpdateAPIView):
-    serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated, CanUpdateProfile]
+
+class UniversityProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = UniversityProfileSerializer
+    permission_classes = [permissions.IsAuthenticated, IsUniversity]
 
     def get_object(self):
         user = self.request.user
-        profile, created = Profile.objects.get_or_create(user=user)
+        profile, created = UniversityProfile.objects.get_or_create(user=user)
         return profile
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT' or self.request.method == 'PATCH':
-            return UpdateProfileSerializer
-        return ProfileSerializer
+        if self.request.method in ['PUT', 'PATCH']:
+            return UpdateUniversityProfileSerializer
+        return UniversityProfileSerializer
+
+
+class TeacherProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = TeacherProfileSerializer
+    permission_classes = [permissions.IsAuthenticated, IsTeacher]
 
     def get_object(self):
         user = self.request.user
-
-        # Check if the user has the required permission (is_teacher)
-        if not user.is_teacher:
-            # Return 403 Forbidden response if the user does not have the permission
-            self.permission_denied(self.request)
-
-        # Retrieve or create the user's profile
-        profile, created = Profile.objects.get_or_create(user=user)
-
+        profile, created = TeacherProfile.objects.get_or_create(user=user)
         return profile
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['user'] = self.request.user
-        return context
+    def get_serializer_class(self):
+        if self.request.method in ['PUT', 'PATCH']:
+            return UpdateTeacherProfileSerializer
+        return TeacherProfileSerializer
+
 
 class UniversityViewTeachers(generics.ListAPIView):
     serializer_class = UniversityViewTeacherSerializer
@@ -75,11 +70,29 @@ class UniversityViewTeachers(generics.ListAPIView):
     def get_queryset(self):
         return CustomUser.objects.filter(is_teacher=True)
 
+
 class LogoutView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         logout(request)
         return Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
 
+
 class ResumesView(generics.ListAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    serializer_class = TeacherProfileSerializer
+    permission_classes = [permissions.IsAuthenticated, IsTeacherOrUniversity]
+
+    def get_queryset(self):
+        return TeacherProfile.objects.all()
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['user'] = self.request.user
+        return context
+
+class TeacherApplicationCreate(generics.CreateAPIView):
+    serializer_class = TeacherApplicationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(user=user)

@@ -35,7 +35,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-class Profile(models.Model):
+class TeacherProfile(models.Model):
     GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
@@ -57,17 +57,34 @@ class Profile(models.Model):
     experience = models.PositiveIntegerField(null=True, blank=True)
     skills = models.TextField(blank=True)
 
+    objects = models.Manager()
+
     def __str__(self):
         return f"{self.user.email} - Profile"
 
-@receiver(post_save, sender=CustomUser)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
+class UniversityProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    full_university_name = models.CharField(max_length=255)
+    abbreviation = models.CharField(max_length=10)
+    city = models.CharField(max_length=50)
+    address = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=15)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+
+    
+
+    def __str__(self):
+        return f"{self.user.email} - University Profile"
 
 @receiver(post_save, sender=CustomUser)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+def create_teacher_profile(sender, instance, created, **kwargs):
+    if created and instance.is_teacher:
+        TeacherProfile.objects.create(user=instance)
+
+@receiver(post_save, sender=CustomUser)
+def create_university_profile(sender, instance, created, **kwargs):
+    if created and instance.is_university:
+        UniversityProfile.objects.create(user=instance)
 
 class TeacherUser(CustomUser):
     class Meta:
@@ -86,3 +103,28 @@ class StaffUser(CustomUser):
         proxy = True
         verbose_name = 'Staff'
         verbose_name_plural = 'Staff'
+
+class ExamQuestion(models.Model):
+    question_text = models.CharField(max_length=255)
+    options = models.TextField()  # Store options as JSON or comma-separated values
+    correct_answer = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.question_text
+
+class TeacherApplication(models.Model):
+    QUALIFICATION_CHOICES = (
+        ('B', 'Bachelor'),
+        ('M', 'Master'),
+        ('P', 'Ph.D.'),
+        ('O', 'Other'),
+    )
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='teacher_application')
+    qualification = models.CharField(max_length=1, choices=QUALIFICATION_CHOICES)
+    experience = models.PositiveIntegerField()
+    skills = models.TextField()
+    status = models.BooleanField(default=False)
+    exam_questions = models.ManyToManyField(ExamQuestion)
+
+    def __str__(self):
+        return f"{self.user.email} - Teacher Application"

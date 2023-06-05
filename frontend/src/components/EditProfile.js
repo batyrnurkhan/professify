@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../Api';
 import styles from '../css/EditProfile.module.css';
@@ -15,34 +15,6 @@ const EditProfile = () => {
   const [profilePicture, setProfilePicture] = useState(null);
   const [existingProfilePicture, setExistingProfilePicture] = useState('');
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await api.get('/users/profile/', {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        });
-
-        const { first_name, last_name, bio, skills, phone_number, address, city, experience, profile_picture } = response.data;
-        setFirstName(first_name);
-        setLastName(last_name);
-        setBio(bio);
-        setSkills(skills);
-        setPhoneNumber(phone_number);
-        setAddress(address);
-        setCity(city);
-        setExperience(experience);
-        setExistingProfilePicture(profile_picture);
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-      }
-    };
-
-    fetchProfile();
-  }, []);
 
   const navigate = useNavigate();
 
@@ -63,7 +35,7 @@ const EditProfile = () => {
         formData.append('profile_picture', profilePicture);
       }
 
-      const response = await api.patch('/users/profile/', formData, {
+      const response = await api.patch('users/profile/teacher/', formData, {
         headers: {
           Authorization: `Token ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -71,7 +43,7 @@ const EditProfile = () => {
       });
 
       if (response.status === 200) {
-        navigate('/profile');
+        navigate('/teacher-profile');
       } else {
         setError('Failed to update profile. Please try again.');
       }
@@ -89,7 +61,7 @@ const EditProfile = () => {
     <div className={styles.container}>
       <h2>Edit Profile</h2>
       <form onSubmit={handleSubmit} className={styles.form}>
-      <label className={styles.label}>
+        <label className={styles.label}>
           <img src={existingProfilePicture} alt="Profile Picture" className={styles.profilePicture} />
         </label>
         <label className={styles.label}>

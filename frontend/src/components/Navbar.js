@@ -14,15 +14,30 @@ const Navbar = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await api.get('/users/profile/', {
+
+        // Fetch the user profile using the appropriate endpoint
+        const response = await api.get('/users/profile/teacher', {
           headers: {
             Authorization: `Token ${token}`,
           },
         });
+
+        // Set the localProfile based on the user data
         setLocalProfile(response.data);
+
+        // Set the global profile using the setProfile function
         setProfile(response.data);
-        setLoggedInUser(response.data.user);
-        console.log("Fetched user ID:", response.data.user.id);
+
+        // Determine the user roles based on the is_teacher and is_university fields
+        const userRoles = {
+          isTeacher: response.data.is_teacher,
+          isUniversity: response.data.is_university,
+        };
+
+
+        // Store userRoles as a JSON string
+        localStorage.setItem('userRoles', JSON.stringify(userRoles));
+
       } catch (error) {
         console.error('Error fetching profile:', error);
       }
@@ -38,9 +53,16 @@ const Navbar = () => {
   };
 
   const token = localStorage.getItem('token');
-  const userRoles = localStorage.getItem('userRoles') || '';
+  const userRoles = JSON.parse(localStorage.getItem('userRoles')) || {};
+  const hasAdminPermission = localProfile?.user?.is_staff !== undefined
+  ? localProfile.user.is_staff
+  : userRoles.isStaff;
 
-  const hasProfilePermission = !!localProfile?.user && localProfile.user.is_university;
+
+
+  console.log('1', userRoles);
+  console.log('3', hasAdminPermission);
+
 
   return (
     <div className={styles.navbar}>
@@ -48,28 +70,37 @@ const Navbar = () => {
         <img src={logo} alt="Logo" className={styles.logo} />
       </Link>
       <div className={styles.buttonGroup}>
-        {token ? (
+        {token && (
           <>
-            {hasProfilePermission && (
-              <Link
-                to="/resumes"
-                className={`${styles.button} ${styles.resumesButton}`}
-              >
-                Resumes
-              </Link>
-            )}
-            <Link
-              to="/profile"
-              className={`${styles.button} ${styles.profileButton}`}
-            >
-              Profile
-            </Link>
-            <Link
-              to="/listings"
-              className={`${styles.button} ${styles.listingsButton}`}
-            >
+            <Link to="/listings" className={`${styles.button} ${styles.listingsButton}`}>
               Listings
             </Link>
+              <div className={styles.dropdown}>
+                <button className={`${styles.button} ${styles.universityButton}`}>
+                  Universities
+                </button>
+                <div className={styles.dropdownContent}>
+                  <Link to="/university-resumes" className={styles.dropdownLink}>
+                    Resumes
+                  </Link>
+                  <Link to="/university-profile" className={styles.dropdownLink}>
+                    Profile
+                  </Link>
+                </div>
+              </div>
+            
+
+  <div className={styles.dropdown}>
+    <button className={`${styles.button} ${styles.teacherButton}`}>
+      Teachers
+    </button>
+    <div className={styles.dropdownContent}>
+      <Link to="/teacher-profile" className={styles.dropdownLink}>
+        Profile
+      </Link>
+    </div>
+  </div>
+
             <Link
               to="/"
               onClick={handleLogout}
@@ -78,18 +109,14 @@ const Navbar = () => {
               Logout
             </Link>
           </>
-        ) : (
+        )}
+
+        {!token && (
           <>
-            <Link
-              to="/login"
-              className={`${styles.button} ${styles.loginButton}`}
-            >
+            <Link to="/login" className={`${styles.button} ${styles.loginButton}`}>
               Login
             </Link>
-            <Link
-              to="/register"
-              className={`${styles.button} ${styles.registerButton}`}
-            >
+            <Link to="/register" className={`${styles.button} ${styles.registerButton}`}>
               Register
             </Link>
           </>
