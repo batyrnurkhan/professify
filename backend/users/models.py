@@ -48,7 +48,7 @@ class TeacherProfile(models.Model):
     bio = models.TextField(blank=True)
     birth_date = models.DateField(null=True, blank=True)
     phone_number = models.CharField(max_length=15, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True, default='profile_pictures/free-icon-user-9777892.png')
     address = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=50, blank=True)
     country = models.CharField(max_length=50, blank=True)

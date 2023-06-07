@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
 from users.models import CustomUser
-
 class Listing(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
@@ -15,6 +14,10 @@ class Listing(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    @property
+    def author_email(self):
+        return self.author.email
 
     def __str__(self):
         return self.name

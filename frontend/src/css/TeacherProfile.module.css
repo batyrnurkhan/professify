@@ -18,6 +18,7 @@
 }
 
 .profilePicture {
+  margin-top: 0.5rem;
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -85,7 +86,8 @@
 }
 
 .editButton {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
   background-color: #4caf50;
   color: #fff;
   border: none;

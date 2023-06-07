@@ -45,9 +45,6 @@ const Listings = () => {
                 </Link>
                 <p className={styles.description}>{listing.description}</p>
               </div>
-              {parseInt(localStorage.getItem('user_id')) === listing.author && (
-                <button>Edit</button>
-              )}
             </div>
           );
         })}

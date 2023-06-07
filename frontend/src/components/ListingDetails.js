@@ -59,16 +59,18 @@ const ListingDetails = () => {
             <strong>Price:</strong> {listing.price}
           </p>
           <p className={styles.author}>
-            <strong>Author:</strong> {listing.author}
+            <strong>Author:</strong> {listing.author_email}
           </p>
         </div>
         <div className={styles.picture}>
           <img src={listing.picture} alt="Listing" />
-          {loggedInUser && loggedInUser.id === listing.author && (
-            <button className={styles.editButton} onClick={() => navigate(`/listings/${listing.slug}/edit`)}>
-              Edit
-            </button>
-          )}
+          {loggedInUser && loggedInUser.username === listing.author_email && (
+  <button className={styles.editButton} onClick={() => navigate(`/listings/${listing.slug}/edit`)}>
+    Edit
+  </button>
+)}
+
+
         </div>
       </div>
     </div>

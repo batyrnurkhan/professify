@@ -61,6 +61,8 @@ class TeacherProfileView(generics.RetrieveUpdateAPIView):
         if self.request.method in ['PUT', 'PATCH']:
             return UpdateTeacherProfileSerializer
         return TeacherProfileSerializer
+    
+    
 
 
 class UniversityViewTeachers(generics.ListAPIView):
@@ -96,3 +98,8 @@ class TeacherApplicationCreate(generics.CreateAPIView):
     def perform_create(self, serializer):
         user = self.request.user
         serializer.save(user=user)
+
+
+class TestUsersView(generics.ListAPIView):
+    queryset = TeacherProfile.objects.all()
+    serializer_class = TeacherProfileSerializer

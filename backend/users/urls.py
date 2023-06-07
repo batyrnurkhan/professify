@@ -8,6 +8,7 @@ from .views import (
     LogoutView,
     ResumesView,
     TeacherApplicationCreate,
+    TestUsersView,
 )
 
 urlpatterns = [
@@ -19,4 +20,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('resumes/', ResumesView.as_view(), name='resumes'),
     path('teacher/application/', TeacherApplicationCreate.as_view(), name='teacher_application_create'),
+    path('test-users/', TestUsersView.as_view(), name='test_users'),
 ]

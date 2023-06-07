@@ -5,6 +5,7 @@ import styles from '../css/TeacherProfile.module.css';
 
 const TeacherProfile = () => {
   const [teacherProfile, setTeacherProfile] = useState(null);
+  const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,7 +28,25 @@ const TeacherProfile = () => {
       }
     };
 
+    const fetchListings = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await api.get('/listings/', {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+
+        console.log('Listings Response:', response.data);
+
+        setListings(response.data);
+      } catch (error) {
+        console.error('Error fetching listings:', error);
+      }
+    };
+
     fetchTeacherProfile();
+    fetchListings();
   }, []);
 
   const navigate = useNavigate();
@@ -58,7 +77,6 @@ const TeacherProfile = () => {
     experience,
     city,
     profile_picture,
-    listings
   } = teacherProfile;
 
   return (
@@ -66,6 +84,9 @@ const TeacherProfile = () => {
       <div className={styles.profileSection}>
         <div className={styles.leftBlock}>
           <img src={profile_picture} alt="Profile Picture" className={styles.profilePicture} />
+          <button className={styles.editButton} onClick={handleEditProfile}>
+            Edit Profile
+          </button>
         </div>
         <div className={styles.rightBlock}>
           <div className={styles.nameBlock}>
@@ -99,6 +120,7 @@ const TeacherProfile = () => {
           </div>
         </div>
       </div>
+
       {listings && listings.length > 0 && (
         <div className={styles.listingsBlock}>
           <h2>Listings:</h2>
@@ -111,9 +133,6 @@ const TeacherProfile = () => {
           ))}
         </div>
       )}
-      <button className={styles.editButton} onClick={handleEditProfile}>
-        Edit Profile
-      </button>
     </div>
   );
 };

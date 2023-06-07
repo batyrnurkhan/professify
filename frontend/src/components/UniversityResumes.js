@@ -41,7 +41,7 @@ const UniversityResumes = () => {
           <div className={styles['resume-id']}>{`User Number: ${index + 1}`}</div>
           <div className={styles['resume-details']}>
             <h3 className={styles['resume-header']}>Bio</h3>
-            <p className={styles['resume-text']}>{user.bio}</p>
+            <p className={`${styles['resume-text']} ${styles['truncate-text']}`}>{user.bio}</p>
             <h3 className={styles['resume-header']}>Experience</h3>
             <p className={styles['resume-text']}>{user.experience}</p>
             <h3 className={styles['resume-header']}>Skills</h3>
@@ -51,12 +51,6 @@ const UniversityResumes = () => {
       ))}
     </div>
   );
-  
-  
-  
-  
-  
-  
 };
 
 export default UniversityResumes;

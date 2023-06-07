@@ -9,61 +9,61 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { setLoggedInUser, setProfile } = useContext(LoggedInContext);
   const [localProfile, setLocalProfile] = useState(null);
+  const [hasTeacherPermission, setHasTeacherPermission] = useState(false);
+  const [hasUniversityPermission, setHasUniversityPermission] = useState(false);
+
+  const fetchTeacherProfile = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await api.get('/users/profile/teacher', {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      setLocalProfile(response.data);
+      setProfile(response.data);
+      setHasTeacherPermission(response.data.is_teacher);
+    } catch (error) {
+      console.error('Error fetching teacher profile:', error);
+    }
+  };
+
+  const fetchUniversityProfile = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await api.get('/users/profile/university', {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      setLocalProfile(response.data);
+      setProfile(response.data);
+      setHasUniversityPermission(response.data.is_university);
+    } catch (error) {
+      console.error('Error fetching university profile:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem('token');
-
-        // Fetch the user profile using the appropriate endpoint
-        const response = await api.get('/users/profile/teacher', {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        });
-
-        // Set the localProfile based on the user data
-        setLocalProfile(response.data);
-
-        // Set the global profile using the setProfile function
-        setProfile(response.data);
-
-        // Determine the user roles based on the is_teacher and is_university fields
-        const userRoles = {
-          isTeacher: response.data.is_teacher,
-          isUniversity: response.data.is_university,
-        };
-
-
-        // Store userRoles as a JSON string
-        localStorage.setItem('userRoles', JSON.stringify(userRoles));
-
-      } catch (error) {
-        console.error('Error fetching profile:', error);
+    const token = localStorage.getItem('token');
+    if (token) {
+      if (localProfile && localProfile.is_teacher) {
+        setHasTeacherPermission(true);
+      } else if (localProfile && localProfile.is_university) {
+        setHasUniversityPermission(true);
+      } else {
+        fetchTeacherProfile();
+        fetchUniversityProfile();
       }
-    };
-
-    fetchProfile();
-  }, [setProfile, setLoggedInUser]);
+    }
+  }, [localProfile]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('userRoles');
     navigate('/');
   };
 
   const token = localStorage.getItem('token');
-  const userRoles = JSON.parse(localStorage.getItem('userRoles')) || {};
-  const hasAdminPermission = localProfile?.user?.is_staff !== undefined
-  ? localProfile.user.is_staff
-  : userRoles.isStaff;
-
-
-
-  console.log('1', userRoles);
-  console.log('3', hasAdminPermission);
-
-
   return (
     <div className={styles.navbar}>
       <Link to="/" className={styles.logo}>
@@ -72,35 +72,46 @@ const Navbar = () => {
       <div className={styles.buttonGroup}>
         {token && (
           <>
-            <Link to="/listings" className={`${styles.button} ${styles.listingsButton}`}>
-              Listings
-            </Link>
+            {hasTeacherPermission && (
+              <div className={styles.dropdown}>
+                <button className={`${styles.button} ${styles.teacherButton}`}>
+                  Teachers
+                </button>
+                <div className={styles.dropdownContent}>
+                  <Link to="/teacher-profile" className={styles.dropdownLink}>
+                    Profile
+                  </Link>
+                </div>
+              </div>
+            )}
+            {hasUniversityPermission && (
               <div className={styles.dropdown}>
                 <button className={`${styles.button} ${styles.universityButton}`}>
                   Universities
                 </button>
                 <div className={styles.dropdownContent}>
-                  <Link to="/university-resumes" className={styles.dropdownLink}>
-                    Resumes
-                  </Link>
                   <Link to="/university-profile" className={styles.dropdownLink}>
                     Profile
                   </Link>
+                  <Link to="/university-resumes" className={styles.dropdownLink}>
+                    Resumes
+                    </Link>
                 </div>
               </div>
-            
-
-  <div className={styles.dropdown}>
-    <button className={`${styles.button} ${styles.teacherButton}`}>
-      Teachers
-    </button>
-    <div className={styles.dropdownContent}>
-      <Link to="/teacher-profile" className={styles.dropdownLink}>
-        Profile
-      </Link>
-    </div>
-  </div>
-
+            )}
+            <div className={styles.dropdown}>
+              <button className={`${styles.button} ${styles.universityButton}`}>
+                Listings
+                </button>
+                <div className={styles.dropdownContent}>
+                  <Link to="/listings" className={styles.dropdownLink}>
+                    Saved Listings
+                    </Link>
+                    <Link to="/listings/create" className={styles.dropdownLink}>
+                      Create Listing
+                      </Link>
+                      </div>
+                      </div>
             <Link
               to="/"
               onClick={handleLogout}
@@ -110,7 +121,6 @@ const Navbar = () => {
             </Link>
           </>
         )}
-
         {!token && (
           <>
             <Link to="/login" className={`${styles.button} ${styles.loginButton}`}>

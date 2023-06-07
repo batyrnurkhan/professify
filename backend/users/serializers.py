@@ -13,15 +13,19 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 class TeacherProfileSerializer(serializers.ModelSerializer):
     is_teacher = serializers.BooleanField(source='user.is_teacher', read_only=True)
+    is_university = serializers.BooleanField(source='user.is_university', read_only=True)
+    email = serializers.CharField(source='user.email', read_only=True)
     class Meta:
         model = TeacherProfile
-        fields = ['first_name', 'last_name', 'bio', 'skills', 'phone_number', 'address', 'city', 'experience', 'profile_picture', 'is_teacher']
+        fields = ['email', 'first_name', 'last_name', 'bio', 'skills', 'phone_number', 'address', 'city', 'experience', 'profile_picture', 'is_teacher', 'is_university']
 
 class UniversityProfileSerializer(serializers.ModelSerializer):
+    is_teacher = serializers.BooleanField(source='user.is_teacher', read_only=True)
+    is_university = serializers.BooleanField(source='user.is_university', read_only=True)
+    email = serializers.CharField(source='user.email', read_only=True)
     class Meta:
         model = UniversityProfile
-        fields = ('id', 'full_university_name', 'abbreviation', 'city', 'address', 'phone_number', 'profile_picture')
-        read_only_fields = ('id',)
+        fields = ('email', 'full_university_name', 'abbreviation', 'city', 'address', 'phone_number', 'profile_picture', 'is_teacher', 'is_university')
 
 class UpdateUniversityProfileSerializer(serializers.ModelSerializer):
     class Meta:

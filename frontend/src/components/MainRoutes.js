@@ -12,6 +12,8 @@ import Listings from './Listings';
 import ListingDetail from './ListingDetails';
 import EditListing from './EditListing';
 import PassExamPage from './PassExamPage';
+import TestUsersPage from './TestUserPage';
+import CreateListing from './CreateListing';
 
 const MainRoutes = () => {
   return (
@@ -30,6 +32,9 @@ const MainRoutes = () => {
       <Route path="/listings/:slug" element={<ListingDetail />} />
       <Route path="/listings/:slug/edit" element={<EditListing />} />
       <Route path="/pass-exam" element={<PassExamPage />} />
+      <Route path="/listings/create" element={<CreateListing />} />
+
+      <Route path="/test-users" element={<TestUsersPage />} /> {/* Add the TestUsersPage route */}
     </Routes>
   );
 };
