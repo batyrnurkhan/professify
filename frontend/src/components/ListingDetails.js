@@ -34,6 +34,19 @@ const ListingDetails = () => {
     fetchListing();
   }, [slug]);
 
+  const handleBuy = () => {
+    const filename = `${listing.slug}.txt`;
+    const content = `This is the content of the listing with slug: ${listing.slug}`;
+
+    const element = document.createElement('a');
+    element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`;
+    element.download = filename;
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -65,13 +78,16 @@ const ListingDetails = () => {
         <div className={styles.picture}>
           <img src={listing.picture} alt="Listing" />
           {loggedInUser && loggedInUser.username === listing.author_email && (
-  <button className={styles.editButton} onClick={() => navigate(`/listings/${listing.slug}/edit`)}>
-    Edit
-  </button>
-)}
+          <button className={styles.editButton} onClick={() => navigate(`/listings/${listing.slug}/edit`)}>
+            Edit
+            </button>
+            )}
 
 
         </div>
+        <button className={styles.buyButton} onClick={handleBuy}>
+      Buy
+    </button>
       </div>
     </div>
   );
